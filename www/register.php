@@ -24,6 +24,7 @@
 		# validate lastname
 		if(!empty($_POST['lname'])) {
 			$lname = $_POST['lname'];
+
 		} else {
 			$errors['lname'] = "Please enter a last name";
 		}
@@ -31,6 +32,13 @@
 		# validate email
 		if(!empty($_POST['email'])) {
 			$email = $_POST['email'];
+
+			#check if email exists
+			$chk = doesEmailExist($dbcon, $email);
+
+			if($chk){
+				$errors['email'] = "Email already exists";
+			}
 		} else {
 			$errors['email'] = "Please enter a valid email";
 		}

@@ -27,3 +27,22 @@
 
 		$statement->execute($data);
 	}
+
+	function doesEmailExist($dbcon,$e) {
+		$result = false;
+
+		$statement = $dbcon->prepare("SELECT email from admin WHERE email=:e");
+
+		# bind params
+		# $statement->execute(":e", $e);
+		$statement->execute([':e' => $e]);
+
+		# get number of rows returned
+		$count = $statement->rowCount();
+
+		if($count > 0) {
+			$result = true;
+		}
+
+		return $result;
+	}
