@@ -7,6 +7,7 @@
 	<hr>
 	<form id="register"  action ="register.php" method ="POST">
 		<div>
+			<!-- <span class="err">Please fill</span> -->
 			<label>first name:</label>
 			<input type="text" name="fname" placeholder="first name">
 		</div>
