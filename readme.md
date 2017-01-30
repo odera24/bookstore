@@ -18,3 +18,7 @@ ToDo:
 2. Ensure admins register with unique emails
 3. Do form validation
 4. Authenticate admins
+
+Fixes & Bugs
+-------------
+1. Different admins could register with the same emails. This issue has been fixed as of this commit.
