@@ -11,3 +11,10 @@ This is a PHP app that will enable a hypothetical bookstore manage inventory and
 - Nginx
 - PHP
 - MySQL
+
+ToDo:
+-------
+1. Enable admins to register
+2. Ensure admins register with unique emails
+3. Do form validation
+4. Authenticate admins
