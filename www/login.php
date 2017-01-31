@@ -14,48 +14,48 @@
 	#ensure that login button is clicked
 	if (array_key_exists('submit', $_POST)) {
 
+
 		# validate email
-		if (!empty($_POST['email'])) {
-			$email = $_POST['email'];
-
-			# check if email exist
-			$chk = doesEmailExist($dbcon, $email);
-
-			if(!$chk) {
-				# admin email does not exist in database
-				$errors['email'] = 'Unauthorized admin user';
-			} else {
-				# email exists in database
-				# validate password
-				if(!empty($_POST['password'])) {
-					$pwd = $_POST['password'];
-
-					# autheticate user by comparing db password to supplied password
-					$auth = loginAdmin($dbcon, $email, $pwd);
-
-					echo $auth;
-
-					if($auth) {
-						header('location: dashboard.php');
-					} else {
-						$errors['password'] = 'Email/Password mismatch';
-					}
-
-				} else {
-					# empty password field
-					$errors['password'] = 'Please enter your password';
-				}
-
-			}
-
-
-
-
-
+		if(empty($_POST['email'])) {
+			$errors['email'] = "Please enter an email address";
 		} else {
-			$errors['email'] = 'Please enter an email address';
+			$email = $_POST['email'];
 		}
 
+		# validate password
+		if(empty($_POST['password'])) {
+			$errors['password'] = "Please enter a password";
+		} else {
+			$pass = $_POST['password'];
+		}
+
+		# process if both username and password are supplied
+		if(!empty($_POST['email']) && !empty($_POST['password'])) {
+			# check for email in database
+			$statement = $dbcon->prepare("SELECT hash from admin WHERE email=:e");
+
+			$statement->execute([':e'=>$email]);
+
+			$count = $statement->rowCount();
+
+			if($count > 0) {
+				# fetch the hash
+				$row = $statement->fetch(PDO::FETCH_ASSOC);
+				$hash = $row['hash'];
+
+				# verify that hash matches with input
+				$test = password_verify($pass, $hash);
+
+				if($test) {
+					# log user in
+					header('location: dashboard.php');
+				} else {
+					$errors['password'] = 'Email/Password Mismatch';
+				}
+			}
+			
+
+		}
 		
 	}
 
