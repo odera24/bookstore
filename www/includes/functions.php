@@ -47,24 +47,6 @@
 		return $result;
 	}
 
-	function loginAdmin($con, $e, $p) {
-		# fetch corresponding email from DB
-		$stmt = $con->prepare("SELECT password from admin WHERE email=:e");
-
-		# bind parameter and execute
-		$stmt->execute([':e' => $e]);
-		$hash = $stmt->fetch();
-
-		# compare password and login 
-		if (password_verify($p, $hash)) {
-			# log admin in
-			return true;
-		} else {
-			# return username /password mismatch error
-			return false;
-		}
-
-	}
 
 	function authAdminPassword($con,$email,$pass) {
 		# check for email in database
