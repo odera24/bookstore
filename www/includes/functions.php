@@ -49,23 +49,23 @@
 
 
 	function authAdminPassword($con,$email,$pass) {
+		#set flag
+		$flag = false;
+		
 		# check for email in database
-		$statement = $con->prepare("SELECT hash from admin WHERE email=:e");
+		$statement = $con->prepare("SELECT id, hash from admin WHERE email=:e");
 
 		$statement->execute([':e'=>$email]);
 
 		$count = $statement->rowCount();
+		$row = $statement->fetch(PDO::FETCH_ASSOC);
 
+		#fetch password 
+		$hash = $row['hash'];
 
-		if($count > 0) {
-			# fetch the hash
-			$row = $statement->fetch(PDO::FETCH_ASSOC);
-			$hash = $row['hash'];
-
-			# verify that hash matches with input
-			$test = password_verify($pass, $hash);
-
-			return $test;
+		if($count == 1 && password_verify($pass,$hash)) {
+			$flag = true;
 		}
-		return false;
+
+		return [$flag,$row];
 	}

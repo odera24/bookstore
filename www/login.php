@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	#connect database..
 	include "config/db.php";
 
@@ -18,23 +19,20 @@
 		# validate email
 		if(empty($_POST['email'])) {
 			$errors['email'] = "Please enter an email address";
-		} else {
-			$email = $_POST['email'];
-		}
+		} 
 
 		# validate password
 		if(empty($_POST['password'])) {
 			$errors['password'] = "Please enter a password";
-		} else {
-			$pass = $_POST['password'];
-		}
+		} 
 
 		# process if both username and password are supplied
 		if(!empty($_POST['email']) && !empty($_POST['password'])) {
 
-			$result = authAdminPassword($dbcon,$email,$pass);
+			$result = authAdminPassword($dbcon,$_POST['email'],$_POST['password']);
 
-			if ($result) {
+			if ($result[0]) {
+				$_SESSION['id'] = $result[1]['id'];
 				header('location: dashboard.php');
 			}
 			$errors['password'] = 'Email/Password Mismatch';
