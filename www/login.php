@@ -31,25 +31,11 @@
 
 		# process if both username and password are supplied
 		if(!empty($_POST['email']) && !empty($_POST['password'])) {
-			# check for email in database
-			$statement = $dbcon->prepare("SELECT hash from admin WHERE email=:e");
 
-			$statement->execute([':e'=>$email]);
+			$result = authAdminPassword($dbcon,$email,$pass);
 
-			$count = $statement->rowCount();
-
-			if($count > 0) {
-				# fetch the hash
-				$row = $statement->fetch(PDO::FETCH_ASSOC);
-				$hash = $row['hash'];
-
-				# verify that hash matches with input
-				$test = password_verify($pass, $hash);
-
-				if($test) {
-					# log user in
-					header('location: dashboard.php');
-				}
+			if ($result) {
+				header('location: dashboard.php');
 			}
 			$errors['password'] = 'Email/Password Mismatch';
 		}	

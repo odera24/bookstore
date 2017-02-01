@@ -65,3 +65,25 @@
 		}
 
 	}
+
+	function authAdminPassword($con,$email,$pass) {
+		# check for email in database
+		$statement = $con->prepare("SELECT hash from admin WHERE email=:e");
+
+		$statement->execute([':e'=>$email]);
+
+		$count = $statement->rowCount();
+
+
+		if($count > 0) {
+			# fetch the hash
+			$row = $statement->fetch(PDO::FETCH_ASSOC);
+			$hash = $row['hash'];
+
+			# verify that hash matches with input
+			$test = password_verify($pass, $hash);
+
+			return $test;
+		}
+		return false;
+	}
