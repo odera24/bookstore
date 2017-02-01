@@ -11,6 +11,7 @@
 		<nav>
 			<ul class="clearfix">
 				<li><a href="add_category.php" class="selected">add category</a></li>
+				<li><a href="add_product.php">add product</a></li>
 				<li><a href="#">view posts</a></li>
 				<li><a href="#">view posts</a></li>
 				<li><a href="#">view posts</a></li>
