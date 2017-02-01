@@ -49,14 +49,10 @@
 				if($test) {
 					# log user in
 					header('location: dashboard.php');
-				} else {
-					$errors['password'] = 'Email/Password Mismatch';
 				}
 			}
-			
-
-		}
-		
+			$errors['password'] = 'Email/Password Mismatch';
+		}	
 	}
 
 
