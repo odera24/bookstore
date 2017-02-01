@@ -37,7 +37,7 @@
 		<h1 id="register-label">Add product</h1>
 		<hr>
 
-		<form id="register" method="POST">
+		<form id="register" method="POST" enctype="multipart/form-data">
 		<div>
 			<label>Product name:</label>
 			<?php display_errors('product',$errors); ?>

@@ -81,3 +81,11 @@
 
 		$statement->execute($data);
 	}
+
+	function cleanupFilename($s) {
+
+		#remove special characters and whitespaces from filename
+		$s = str_replace(' ', '-', $s);
+		$dirt = ['_','@','$','!','%','&','^','/','\\',',','?','>','<','`','~','=','+','[',']','{','}','|','(',')'];
+		return str_replace($dirt, '', $s);
+	}
