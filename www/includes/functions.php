@@ -69,3 +69,15 @@
 
 		return [$flag,$row];
 	}
+
+	function addCategory($con,$c,$d) {
+		# prepare statement...
+		$statement = $con->prepare("INSERT INTO category(name,description) VALUES (:n, :d)");
+
+		$data = [
+			':n' => $c,
+			':d' => $d
+		];
+
+		$statement->execute($data);
+	}

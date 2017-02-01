@@ -10,7 +10,7 @@
 		<h1>T<span>SSB</span></h1>
 		<nav>
 			<ul class="clearfix">
-				<li><a href="#" class="selected">add posts</a></li>
+				<li><a href="add_category.php" class="selected">add category</a></li>
 				<li><a href="#">view posts</a></li>
 				<li><a href="#">view posts</a></li>
 				<li><a href="#">view posts</a></li>
