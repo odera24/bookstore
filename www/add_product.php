@@ -6,6 +6,7 @@
 	# import functions
 	include "includes/functions.php";
 
+	$title = 'Add Product';
 	# import header
 	include "includes/header2.php";
 
