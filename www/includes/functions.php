@@ -101,6 +101,24 @@
 		return $optionList;
 	}
 
+	function addProduct($con, $cid, $n, $p, $iloc, $d, $a) {
+		# prepare statement
+		$stmt = $con->prepare("INSERT INTO product(category_id, name, price, image_location, description, author) VALUES (:c, :n, :p, :i, :d, :a)");
+
+		$data = [
+				':c' => $cid, 
+				':n' => $n, 
+				':p' => $p, 
+				':i' => $iloc, 
+				':d' => $d, 
+				':a' => $a
+		];
+
+		$res = $stmt->execute($data);
+
+		return $stmt->rowCount();
+	}
+
 	function cleanupFilename($s) {
 
 		#remove special characters and whitespaces from filename

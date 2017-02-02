@@ -12,23 +12,77 @@
 	# errors
 	$errors =[];
 
+	# define constants
+	define('MAX_FILE_SIZE', 2097152);
+
+	# add product 
 	if (array_key_exists('submit', $_POST)) {
+		# variables
+		$upload_test = false;
+		$upload_loc = 'uploads/';
+		$upload_dest = '';
+		$upload_ext = ['image/jpg','image/jpeg','image/png'];
 
+		# validate product name
+		if(empty($_POST['name'])) {
+			$errors['name'] = "Please enter product name";
+		}
 
-		# validate category name
-		if(empty($_POST['category'])) {
-			$errors['category'] = "Please enter a category";
-		} 
-
-		# validate category description
+		# validate product description
 		if(empty($_POST['description'])) {
-			$errors['description'] = "Please enter category description";
+			$errors['description'] = "Please enter product description";
+		}
+
+		# validate category
+		if(empty($_POST['category'])) {
+			$errors['category'] = "Please select a category";
+		}
+
+		# validate price
+		if(empty($_POST['price'])) {
+			$errors['price'] = "Please enter product price";
+		}
+
+		# validate author
+		if(empty($_POST['author'])) {
+			$errors['author'] = "Please enter author";
+		}
+
+		# validate image...check if image is selected
+		if(empty($_FILES['image']['name'])) {
+			$errors['image'] = "click 'choose file' to upload an image";
+		} 
+		else {
+
+			# check image file size...
+			if($_FILES['image']['size'] > MAX_FILE_SIZE) {
+				$errors['image'] = 'Picture is too large! Allowed maximum is: '.MAX_FILE_SIZE;
+			}
+
+			# check extension
+			if(!in_array($_FILES['image']['type'], $upload_ext)){
+				$errors['image'] = 'Invalid file type';
+			}
 		}
 
 		if(empty($errors)){
-			addCategory($dbcon,$_POST['category'],$_POST['description']);
+			# generate new file name..
+			$filename = cleanupFilename($_FILES['image']['name']);
+
+			# generate random number
+			$random = substr(number_format(time() * rand(),0,'',''),0,10);
+
+			# build destination location
+			$upload_dest = $upload_loc.$random.$filename;
+
+			# move file from temporary location to server
+			$upload_test = move_uploaded_file($_FILES['image']['tmp_name'], $upload_dest);
 		}
 
+		if($upload_test) {
+			# successful upload, insert to database...
+			$result = addProduct($dbcon, $_POST['category'], $_POST['name'], $_POST['price'], $upload_dest, $_POST['description'],$_POST['author']);
+		}
 	}
 ?>
 
@@ -40,8 +94,8 @@
 		<form id="register" method="POST" enctype="multipart/form-data">
 		<div>
 			<label>Product name:</label>
-			<?php display_errors('product',$errors); ?>
-			<input type="text" name="product" placeholder="Product Name">
+			<?php display_errors('name',$errors); ?>
+			<input type="text" name="name" placeholder="Product Name">
 		</div>
 		<div>
 			<label>Product Description:</label>
@@ -57,6 +111,11 @@
 					echo fetchCategories($dbcon);
 				?>
 			</select>
+		</div>
+		<div>
+			<label>Author:</label>
+			<?php display_errors('author',$errors); ?>
+			<input type="text" name="author" placeholder="Book Author">
 		</div>
 		<div>
 			<label>Price:</label>
