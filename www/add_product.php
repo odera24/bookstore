@@ -51,7 +51,12 @@
 		<div>
 			<label>Product Category:</label>
 			<?php display_errors('category',$errors); ?>
-			<select name="category"></select>
+			<select name="category">
+				<option disabled="disabled" selected="selected"> -- select category -- </option>
+				<?php
+					echo fetchCategories($dbcon);
+				?>
+			</select>
 		</div>
 		<div>
 			<label>Price:</label>

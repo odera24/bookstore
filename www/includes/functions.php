@@ -82,6 +82,25 @@
 		$statement->execute($data);
 	}
 
+	function fetchCategories($con){
+		# declare string to build html
+		$optionList = '';
+
+		#prepare statement...
+		$stmt = $con->prepare('SELECT * FROM category');
+
+		$stmt->execute();
+
+		$result = $stmt->fetchAll(PDO::FETCH_BOTH);
+
+		foreach ($result as $row) {
+			# code...
+			$optionList .= '<option value="'.$row[0].'">'.$row['name'].'</option>';
+		}
+
+		return $optionList;
+	}
+
 	function cleanupFilename($s) {
 
 		#remove special characters and whitespaces from filename
