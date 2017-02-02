@@ -130,14 +130,20 @@
 		return $stmt->rowCount();
 	}
 
-	function fetchProducts($con){
+	function fetchProducts($con, $id = false){
+
+		if($id) {
+			# prepare statement
+			$stmt = $con->prepare("SELECT * FROM product WHERE id=:e");
+			$stmt->execute([':e' => $id]);
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			return $result;
+		} 
+		
 		# prepare statement
 		$stmt = $con->prepare("SELECT * FROM product");
-
 		$stmt->execute();
-
 		$result = $stmt->fetchAll(PDO::FETCH_BOTH);
-
 		return $result;
 	}
 

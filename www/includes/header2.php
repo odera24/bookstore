@@ -16,8 +16,7 @@
 				<li><a href="add_category.php">add category</a></li>
 				<li><a href="add_product.php">add product</a></li>
 				<li><a href="view_products.php">view products</a></li>
-				<li><a href="#">view posts</a></li>
-				<li><a href="#">view posts</a></li>
+				<li><a href="view_categories.php">view categories</a></li>
 				<li><a href="#">logout</a></li>
 			</ul>
 		</nav>
