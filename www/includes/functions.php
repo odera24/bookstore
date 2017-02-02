@@ -101,6 +101,17 @@
 		return $optionList;
 	}
 
+	function fetchCategoryName($con, $id) {
+		# prepare statement
+		$stmt = $con->prepare("SELECT name FROM category WHERE id=:e");
+
+		$stmt->execute([':e' => $id]);
+
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $result['name'];
+	}
+
 	function addProduct($con, $cid, $n, $p, $iloc, $d, $a) {
 		# prepare statement
 		$stmt = $con->prepare("INSERT INTO product(category_id, name, price, image_location, description, author) VALUES (:c, :n, :p, :i, :d, :a)");
@@ -117,6 +128,17 @@
 		$res = $stmt->execute($data);
 
 		return $stmt->rowCount();
+	}
+
+	function fetchProducts($con){
+		# prepare statement
+		$stmt = $con->prepare("SELECT * FROM product");
+
+		$stmt->execute();
+
+		$result = $stmt->fetchAll(PDO::FETCH_BOTH);
+
+		return $result;
 	}
 
 	function cleanupFilename($s) {

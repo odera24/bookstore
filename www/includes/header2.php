@@ -15,7 +15,7 @@
 			<ul class="clearfix">
 				<li><a href="add_category.php">add category</a></li>
 				<li><a href="add_product.php">add product</a></li>
-				<li><a href="#">view posts</a></li>
+				<li><a href="view_products.php">view products</a></li>
 				<li><a href="#">view posts</a></li>
 				<li><a href="#">view posts</a></li>
 				<li><a href="#">logout</a></li>
