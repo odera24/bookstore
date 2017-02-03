@@ -30,7 +30,7 @@
 				<?php
 					foreach ($rows as $row) {
 						# code...
-						echo '<tr><td>'.$row['name'].'</td><td>'.fetchCategoryName($dbcon, $row['id']).'</td><td>'.$row['author'].'</td><td>'.$row['description']."</td><td><a href=\"edit_product.php?id=$row[id]\">edit</a></td><td><a href=\"delete_product.php?id=$row[id]\" onClick=\"return confirm('Are you sure you want to delete?')\">delete</a></td></tr>";
+						echo '<tr><td>'.$row['name'].'</td><td>'.fetchCategoryName($dbcon, $row['category_id']).'</td><td>'.$row['author'].'</td><td>'.$row['description']."</td><td><a href=\"edit_product.php?id=$row[id]\">edit</a></td><td><a href=\"delete_product.php?id=$row[id]\" onClick=\"return confirm('Are you sure you want to delete?')\">delete</a></td></tr>";
 					}
 				?> 
       		</tbody>
