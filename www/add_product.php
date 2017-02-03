@@ -67,17 +67,22 @@
 		}
 
 		if(empty($errors)){
-			# generate new file name..
-			$filename = cleanupFilename($_FILES['image']['name']);
+			# upload image
+			$result = doFileUpload($_FILES, 'image', $upload_loc);
 
-			# generate random number
-			$random = substr(number_format(time() * rand(),0,'',''),0,10);
+			# if image upload is successful...
+			if($result[0]) {
 
-			# build destination location
-			$upload_dest = $upload_loc.$random.$filename;
+				# cleanup $_POST
+				$clean = array_map('trim', $_POST);
 
-			# move file from temporary location to server
-			$upload_test = move_uploaded_file($_FILES['image']['tmp_name'], $upload_dest);
+				# append uploaded image link to array
+				$clean['image_location'] = $result[1];
+
+				# add product to database...
+				$result = addProduct($dbcon, $clean);
+			}
+
 		}
 
 		if($upload_test) {
@@ -109,7 +114,12 @@
 			<select name="category">
 				<option disabled="disabled" selected="selected"> -- select category -- </option>
 				<?php
-					echo fetchCategories($dbcon);
+					$list = fetchCategories($dbcon);
+
+					foreach ($list as $item) {
+						# code...
+						echo '<option value="'.$item['id'].'">'.$item['name'].'</option>';
+					}
 				?>
 			</select>
 		</div>

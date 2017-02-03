@@ -19,8 +19,74 @@
 	$product = fetchProducts($dbcon, $_GET['id']);
 
 	if(array_key_exists('submit', $_POST)) {
+		# initialize array to hold changes
+		$holder = [];
 
-		# check for name change 
+		# validate product name
+		if(empty($_POST['name'])) {
+			$errors['name'] = "Please enter product name";
+		} 
+		else {
+			# test for changes
+			$res = strcmp($product['name'], $_POST['name']);
+			if($res) {
+				$holder['name'] = $_POST['name'];
+			} 
+		}
+
+		# validate product description
+		if(empty($_POST['description'])) {
+			$errors['description'] = "Please enter product description";
+		}
+		else {
+			# test for changes
+			$res = strcmp($product['description'], $_POST['description']);
+			if($res) {
+				$holder['description'] = $_POST['description'];
+			} 
+		}
+
+		# validate category
+		if(empty($_POST['category'])) {
+			$errors['category'] = "Please select a category";
+		}
+		else {
+			# test for changes
+			$res = strcmp($product['category_id'], $_POST['category']);
+			if($res) {
+				$holder['category_id'] = $_POST['category'];
+			} 
+		}
+
+		# validate price
+		if(empty($_POST['price'])) {
+			$errors['price'] = "Please enter product price";
+		}
+		else {
+			# test for changes
+			$res = strcmp($product['price'], $_POST['price']);
+			if($res) {
+				$holder['price'] = $_POST['price'];
+			} 
+		}
+
+		# validate author
+		if(empty($_POST['author'])) {
+			$errors['author'] = "Please enter author";
+		}
+		else {
+			# test for changes
+			$res = strcmp($product['author'], $_POST['author']);
+			if($res) {
+				$holder['author'] = $_POST['author'];
+			} 
+		}
+
+		# update if no errors
+		if(empty($errors)){
+			$res = editProducts();
+		}
+		print_r($holder);
 
 	}
 
@@ -46,13 +112,17 @@
 			<label>Product Category:</label>
 			<?php display_errors('category',$errors); ?>
 			<select name="category">
-				<option value="<?= $product['category_id'];?>" selected="selected" disabled="disabled"><?= fetchCategoryName($dbcon,$product['category_id']);?></option>
-				<optgroup label="---------------------">
-					<?php
-						echo fetchCategories($dbcon);
-					?>
-				</optgroup>
-				
+				<option value="<?= $product['category_id'];?>" selected="selected"><?= fetchCategoryName($dbcon,$product['category_id']);?></option>
+				<?php
+					$categoriesList = fetchCategories($dbcon);
+
+					foreach ($categoriesList as $row) {
+						# code...
+						if($row['id'] !== $product['category_id']){
+							echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+						} 
+					}
+				?>
 			</select>
 		</div>
 		<div>

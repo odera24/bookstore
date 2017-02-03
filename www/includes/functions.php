@@ -91,14 +91,13 @@
 
 		$stmt->execute();
 
-		$result = $stmt->fetchAll(PDO::FETCH_BOTH);
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-		foreach ($result as $row) {
-			# code...
-			$optionList .= '<option value="'.$row[0].'">'.$row['name'].'</option>';
-		}
+		return $result;
+	}
 
-		return $optionList;
+	function fetchCategoriesLess($con, $id){
+
 	}
 
 	function fetchCategoryName($con, $id) {
@@ -112,17 +111,21 @@
 		return $result['name'];
 	}
 
-	function addProduct($con, $cid, $n, $p, $iloc, $d, $a) {
+	function addProduct($con, $array) {
+
+		# break array apart into variables
+		extract($array);
+
 		# prepare statement
 		$stmt = $con->prepare("INSERT INTO product(category_id, name, price, image_location, description, author) VALUES (:c, :n, :p, :i, :d, :a)");
 
 		$data = [
-				':c' => $cid, 
-				':n' => $n, 
-				':p' => $p, 
-				':i' => $iloc, 
-				':d' => $d, 
-				':a' => $a
+				':c' => $category, 
+				':n' => $name, 
+				':p' => $price, 
+				':i' => $image_location, 
+				':d' => $description, 
+				':a' => $author
 		];
 
 		$res = $stmt->execute($data);
@@ -153,4 +156,27 @@
 		$s = str_replace(' ', '-', $s);
 		$dirt = ['_','@','$','!','%','&','^','/','\\',',','?','>','<','`','~','=','+','[',']','{','}','|','(',')'];
 		return str_replace($dirt, '', $s);
+	}
+
+	function doFileUpload($file, $fieldName, $uploadDir) {
+		$res = false;
+		# process filename
+		$filename = cleanupFilename($file[$fieldName]['name']);
+
+		# generate random number
+		$random = substr(number_format(time() * rand(),0,'',''),0,10);
+
+		$newfilename = $random.$filename;
+
+		# build destination location
+		$upload_dest = $uploadDir.$newfilename;
+
+		# move file from tmp to destination
+		$bool = move_uploaded_file($_FILES[$fieldName]['tmp_name'], $upload_dest);
+
+		if($bool) {
+			$res = true;
+		}
+
+		return [$res, $upload_dest];
 	}
