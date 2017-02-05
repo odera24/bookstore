@@ -82,18 +82,18 @@
 		$statement->execute($data);
 	}
 
-	function fetchCategories($con){
-		# declare string to build html
-		$optionList = '';
+	function fetchCategories($con, $id = false){
 
 		#prepare statement...
+		if($id) {
+			$stmt = $con->prepare('SELECT * FROM category WHERE id=:cid');
+			$stmt->execute([':cid' => $id]);
+			return $stmt->fetch(PDO::FETCH_ASSOC);
+		}
+		
 		$stmt = $con->prepare('SELECT * FROM category');
-
 		$stmt->execute();
-
-		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-		return $result;
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	function fetchCategoryName($con, $id) {
@@ -105,6 +105,46 @@
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		return $result['name'];
+	}
+
+	function updateCategory($con, $array, $id){
+		$res = false;
+
+		$queryStr = "UPDATE category SET";
+
+		# loop through array to build update query
+		foreach ($array as $key => $value) {
+			# code to generate update bindings...
+			$queryStr .= " $key = :$key,";
+		}
+
+		# remove trailing comma
+		$queryStr = rtrim($queryStr, ',');
+		
+		$queryStr .= " WHERE id = :id";
+
+		$stmt = $con->prepare($queryStr);
+
+		$array['id'] = $id;
+
+		$stmt->execute($array);
+
+		if($stmt->rowCount() == 1){
+			$res = true;
+		}
+		return $res;
+	}
+
+	function deleteCategory($con, $id) {
+		# prepare statement
+		$res = false;
+		$stmt = $con->prepare('DELETE FROM category WHERE id=:uid');
+		$stmt->execute([':uid' => $id]);
+
+		if ($stmt->rowCount() == 1) {
+			$res = true;
+		}
+		return $res;
 	}
 
 	function addProduct($con, $array) {

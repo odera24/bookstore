@@ -26,6 +26,7 @@
 			</thead>
 			<tbody>
 				<?php
+					# print_r($rows); exit();
 					foreach ($rows as $row) {
 						# code...
 						echo '<tr><td>'.$row['name'].'</td><td>'.$row['description']."</td><td><a href=\"edit_category.php?id=$row[id]\">edit</a></td><td><a href=\"delete_category.php?id=$row[id]\">delete</a></td></tr>";
