@@ -239,6 +239,18 @@ form#register input[type="password"]  {
 	width: 300px;
 }
 
+input[type="submit"] {
+	padding: 4px;
+	width: 100px;
+	color: #fff;
+	border:none;
+	font-size: 16px;
+	text-transform: capitalize;
+	font-weight: bold;
+	margin: 20px 0 0 105px;
+	background-color: #16193b;
+}
+
 form#login input[type="submit"],
 form#register input[type="submit"] {
 	padding: 4px;
@@ -334,3 +346,5 @@ table#tab tr td:first-of-type {
 	color: #ccc;
 	text-decoration: underline;
 }
+
+

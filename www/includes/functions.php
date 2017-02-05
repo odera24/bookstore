@@ -176,6 +176,18 @@
 		return $res;
 	}
 
+	function deleteProduct($con, $id) {
+		# prepare statement
+		$res = false;
+		$stmt = $con->prepare('DELETE FROM product WHERE id=:uid');
+		$stmt->execute([':uid' => $id]);
+
+		if ($stmt->rowCount() == 1) {
+			$res = true;
+		}
+		return $res;
+	}
+
 	function cleanupFilename($s) {
 
 		#remove special characters and whitespaces from filename
