@@ -96,10 +96,6 @@
 		return $result;
 	}
 
-	function fetchCategoriesLess($con, $id){
-
-	}
-
 	function fetchCategoryName($con, $id) {
 		# prepare statement
 		$stmt = $con->prepare("SELECT name FROM category WHERE id=:e");
@@ -150,6 +146,36 @@
 		return $result;
 	}
 
+	function updateProduct($con, $array, $id) {
+
+		$res = false;
+
+		$queryStr = "UPDATE product SET";
+
+		# loop through array to build update query
+		foreach ($array as $key => $value) {
+			# code to generate update bindings...
+			# $queryStr .= " $key = :".substr($key, 0, 1).",";
+			$queryStr .= " $key = :$key,";
+		}
+
+		# remove trailing comma
+		$queryStr = rtrim($queryStr, ',');
+		
+		$queryStr .= " WHERE id = :id";
+
+		$stmt = $con->prepare($queryStr);
+
+		$array['id'] = $id;
+
+		$stmt->execute($array);
+
+		if($stmt->rowCount() == 1){
+			$res = true;
+		}
+		return $res;
+	}
+
 	function cleanupFilename($s) {
 
 		#remove special characters and whitespaces from filename
@@ -158,10 +184,10 @@
 		return str_replace($dirt, '', $s);
 	}
 
-	function doFileUpload($file, $fieldName, $uploadDir) {
+	function doFileUpload($filesArray, $fieldName, $uploadDir) {
 		$res = false;
 		# process filename
-		$filename = cleanupFilename($file[$fieldName]['name']);
+		$filename = cleanupFilename($filesArray[$fieldName]['name']);
 
 		# generate random number
 		$random = substr(number_format(time() * rand(),0,'',''),0,10);
@@ -172,7 +198,7 @@
 		$upload_dest = $uploadDir.$newfilename;
 
 		# move file from tmp to destination
-		$bool = move_uploaded_file($_FILES[$fieldName]['tmp_name'], $upload_dest);
+		$bool = move_uploaded_file($filesArray[$fieldName]['tmp_name'], $upload_dest);
 
 		if($bool) {
 			$res = true;

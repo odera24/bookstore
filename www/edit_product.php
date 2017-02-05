@@ -18,6 +18,7 @@
 
 	$product = fetchProducts($dbcon, $_GET['id']);
 
+
 	if(array_key_exists('submit', $_POST)) {
 		# initialize array to hold changes
 		$holder = [];
@@ -28,7 +29,7 @@
 		} 
 		else {
 			# test for changes
-			$res = strcmp($product['name'], $_POST['name']);
+			$res = strcmp($product['name'], trim($_POST['name']));
 			if($res) {
 				$holder['name'] = $_POST['name'];
 			} 
@@ -40,7 +41,7 @@
 		}
 		else {
 			# test for changes
-			$res = strcmp($product['description'], $_POST['description']);
+			$res = strcmp($product['description'], trim($_POST['description']));
 			if($res) {
 				$holder['description'] = $_POST['description'];
 			} 
@@ -52,7 +53,7 @@
 		}
 		else {
 			# test for changes
-			$res = strcmp($product['category_id'], $_POST['category']);
+			$res = strcmp($product['category_id'], trim($_POST['category']));
 			if($res) {
 				$holder['category_id'] = $_POST['category'];
 			} 
@@ -64,7 +65,7 @@
 		}
 		else {
 			# test for changes
-			$res = strcmp($product['price'], $_POST['price']);
+			$res = strcmp($product['price'], trim($_POST['price']));
 			if($res) {
 				$holder['price'] = $_POST['price'];
 			} 
@@ -76,18 +77,19 @@
 		}
 		else {
 			# test for changes
-			$res = strcmp($product['author'], $_POST['author']);
+			$res = strcmp($product['author'], trim($_POST['author']));
 			if($res) {
 				$holder['author'] = $_POST['author'];
 			} 
 		}
+		# update if no errors and change was made to the product
+		if(empty($errors) && !empty($holder)){
+			$res = updateProduct($dbcon, $holder, $product['id']);
 
-		# update if no errors
-		if(empty($errors)){
-			$res = editProducts();
+			if ($res) {
+				header('location: view_products.php');
+			}
 		}
-		print_r($holder);
-
 	}
 
 ?>
